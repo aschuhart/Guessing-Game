@@ -3,15 +3,15 @@ import axios from 'axios';
 
 function GuessGame() {
   const [guesses, setGuesses] = useState(5);
-  const [gameData, setGameData] = useState(null); // Stores game details
+  const [gameData, setGameData] = useState(null); 
   const [userGuess, setUserGuess] = useState('');
-  const [isCorrect, setIsCorrect] = useState(null); // Tracks correct/incorrect guess
+  const [isCorrect, setIsCorrect] = useState(null); 
 
 
   const fetchGameData = async () => {
     try {
-      const clientId = '8r8hvuuoaxu760vo8c6o5er835gxnm';
-      const clientSecret = 'a0sy335ykw70e0u9k7re4nw67aoljs';
+      const clientId = 'your_client_id';
+      const clientSecret = 'your_client_secret';
       const tokenResponse = await axios.post(
         'https://id.twitch.tv/oauth2/token',
         null,
@@ -31,7 +31,7 @@ function GuessGame() {
         {
           headers: {
             'Client-ID': clientId,
-            Authorization: `Bearer ${ftdumehvimxk5byngbqx168oj60sh6}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
