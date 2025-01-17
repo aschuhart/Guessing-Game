@@ -3,49 +3,21 @@ import axios from 'axios';
 
 function GuessGame() {
   const [guesses, setGuesses] = useState(5);
-  const [gameData, setGameData] = useState(null); 
+  const [gameData, setGameData] = useState(null); // Stores game details
   const [userGuess, setUserGuess] = useState('');
-  const [isCorrect, setIsCorrect] = useState(null); 
+  const [isCorrect, setIsCorrect] = useState(null); // Tracks correct/incorrect guess
 
-
+  // Fetch game data from your backend
   const fetchGameData = async () => {
     try {
-      const clientId = 'your_client_id';
-      const clientSecret = 'your_client_secret';
-      const tokenResponse = await axios.post(
-        'https://id.twitch.tv/oauth2/token',
-        null,
-        {
-          params: {
-            client_id: clientId,
-            client_secret: clientSecret,
-            grant_type: 'client_credentials',
-          },
-        }
-      );
-      const token = tokenResponse.data.access_token;
-
-      const response = await axios.post(
-        'https://api.igdb.com/v4/games',
-        'fields name,cover.image_id; limit 1; offset 0;',
-        {
-          headers: {
-            'Client-ID': clientId,
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const game = response.data[0];
-      const coverUrl = `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`;
-
-      setGameData({ name: game.name, coverUrl });
+      const response = await axios.get('http://localhost:5000/api/game'); // Pointing to backend API
+      const { name, coverUrl } = response.data;
+      setGameData({ name, coverUrl });
     } catch (error) {
-      console.error('Error fetching game data:', error);
+      console.error('Error fetching game data:', error.message);
     }
   };
 
- 
   useEffect(() => {
     fetchGameData();
   }, []);
@@ -63,7 +35,7 @@ function GuessGame() {
     setGuesses(5);
     setIsCorrect(null);
     setUserGuess('');
-    fetchGameData();
+    fetchGameData(); // Fetch a new random game
   };
 
   if (!gameData) {
@@ -99,3 +71,4 @@ function GuessGame() {
 }
 
 export default GuessGame;
+
